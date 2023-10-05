@@ -1,15 +1,184 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;1,200;1,300;1,900&family=Ubuntu:ital,wght@0,300;0,500;1,400;1,700&family=Young+Serif&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Gabarito&family=Poppins:ital,wght@0,300;1,200;1,300;1,900&family=Ubuntu:ital,wght@0,300;0,500;1,400;1,700&family=Young+Serif&display=swap");
+
+// variables
+$gabrito: "Gabarito", sans-serif;
+$poppins: "Poppins", sans-serif;
+$young: "Young Serif", serif;
+
+$blue: #00239c;
+$dark: #000000;
+$white: #f2f5ff;
+$red: #ab4e68;
+$warning: #c5bc05;
+$gray: #999999;
+
+//querries
+$xxs: 320px;
+$xxsh: 425px;
+$xls: 600px;
+$xlsb: 692;
+$xlsh: 500px;
+$xms: 375px;
+$sm: 500px;
+$smb: 576px;
+$md: 780px;
+$lgh: 930px;
+$mdb: 991px;
+$lg: 1024px;
+$lgb: 1200px;
+$lgd: 1166px;
+$xlg: 1600px;
+$xlg1920: 1920px;
+$xxlg: 5000px;
+
+// mixins
+
+@mixin transition {
+  transition: all 0.5s ease-out;
+}
+
+@mixin background-img {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+@mixin svg-interaction {
+  svg {
+    path,
+    circle,
+    rect {
+      @include transition;
+    }
+
+    &:hover {
+      path,
+      circle,
+      rect {
+        stroke: $white;
+      }
+    }
+  }
+}
+
+@mixin mq($size) {
+  @media screen and (max-width: $size) {
+    @content;
+  }
+}
+
+@mixin mqh($size) {
+  @media screen and (max-height: $size) {
+    @content;
+  }
+}
+
+@mixin scroll-bar {
+  &::-webkit-scrollbar {
+    width: (7px);
+
+    @include mq($xls) {
+      display: none;
+    }
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: $white;
+
+    @include mq($xls) {
+      display: none;
+    }
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: $dark;
+    border-radius: 10px;
+
+    @include mq($xls) {
+      display: none;
+    }
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: lighten($color: $dark, $amount: 10);
+
+    @include mq($xls) {
+      display: none;
+    }
+  }
+}
+
+@function pxToVh($element) {
+  @return #{($element/1080) * 100}vh;
+}
+
+@function pxToVw($element) {
+  @return #{($element/1920) * 100}vw;
+}
+
+@function pxToEm($element) {
+  @return #{$element/16}em;
+}
+
+@function toPerc($element) {
+  @return #{$element * 100%};
+}
+
+@mixin iconBtn {
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  padding: 7px;
+  cursor: pointer;
+  background-color: $white;
+  @include mq($lg) {
+    height: 35px;
+  }
+  @include mq($mdb) {
+    height: 40px;
+  }
+  @include mq($small-device) {
+    height: 30px;
+  }
+  .icon {
+    @include mq($lg) {
+      font-size: 20px;
+    }
+    @include mq($mdb) {
+      font-size: 30px;
+    }
+    @include mq($small-device) {
+      font-size: 20px;
+    }
+  }
+}
+
 body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100vw;
+  min-height: 100vh;
+  @include scroll-bar;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   padding: 0;
-  margin: 0;
+  * {
+    box-sizing: border-box;
+    font-family: $poppins;
+  }
+}
+* {
+  box-sizing: border-box;
+  font-family: $poppins;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: $poppins;
 }
