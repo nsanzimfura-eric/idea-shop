@@ -68,6 +68,12 @@ const navItems = [
 ];
 
 // cart for user
+const items = [
+  { id: 1, name: "Item 1", quantity: 3, price: 10 },
+  { id: 2, name: "Item 2", quantity: 2, price: 15 },
+  { id: 3, name: "Item 3", quantity: 4, price: 8 },
+];
+
 function Cart() {
   return (
     <motion.div
@@ -88,7 +94,38 @@ function Cart() {
           })}
         </div>
         <div className="checkout">
-          <h1 className="h1">Checkout</h1>
+          <div className="h1 loader">
+            <span>Checkout</span>
+          </div>
+          <table className="details">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.name}</td>
+                  <td>{item.quantity}</td>
+                  <td className="price">${item.price}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="payment">
+            <div className="amount">
+              Total Quantities: <span>{7}</span>
+            </div>
+            <div className="amount">
+              Overall Total: <span>{1000}$</span>
+            </div>
+          </div>
+          <div className="actions">
+            <button>Process to Pay</button>
+          </div>
         </div>
       </div>
       <CurveFN />
