@@ -6,7 +6,7 @@ $gabrito: "Gabarito", sans-serif;
 $poppins: "Poppins", sans-serif;
 $young: "Young Serif", serif;
 
-$blue: #00239c;
+$blue: #04259f;
 $dark: #212534;
 $white: #f2f5ff;
 $red: #ab4e68;
@@ -31,6 +31,8 @@ $lgd: 1166px;
 $xlg: 1600px;
 $xlg1920: 1920px;
 $xxlg: 5000px;
+$card-height: 50vh;
+$card-width: calc($card-height / 1.5);
 
 // mixins
 
@@ -42,24 +44,6 @@ $xxlg: 5000px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-}
-
-@mixin svg-interaction {
-  svg {
-    path,
-    circle,
-    rect {
-      @include transition;
-    }
-
-    &:hover {
-      path,
-      circle,
-      rect {
-        stroke: $white;
-      }
-    }
-  }
 }
 
 @mixin mq($size) {
@@ -228,14 +212,17 @@ code {
 
 //demo to delete
 .card_product {
-  height: 100vh;
+  min-height: 100vh;
   background-color: $dark;
   position: fixed;
   right: 0;
   top: 0;
-  color: white;
+  color: $white;
   width: 100vw;
   padding: 50px;
+  @include scroll-bar;
+  overflow-y: auto;
+
   @include mq($xlg) {
     padding: 30px;
   }
@@ -246,19 +233,57 @@ code {
     padding: 15px;
   }
 
-  .products {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    width: 100%;
-    background-color: transparent;
-    .singleProduct {
-      width: calc(100% / 5 - 40px);
-      aspect-ratio: 1/1.2;
-      height: auto;
+  .productsWrapper {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 0;
+    height: 100%;
+    @include mq($md) {
+      display: flex;
+      flex-direction: column;
+    }
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      background-color: transparent;
+      height: 100%;
+      @include mq($lg) {
+        padding: 15px;
+      }
+      .singleProduct {
+        width: calc(100% / 4 - 40px);
+        aspect-ratio: 1/1.2;
+        height: auto;
+        max-height: calc(100vh / 3);
+        padding: 0;
+        margin: 0;
+        border-radius: 16px;
+        @include mq($xlg) {
+          width: calc(100% / 3 - 40px);
+        }
+        @include mq($lg) {
+          width: calc(100% / 2 - 30px);
+        }
+        @include mq($md) {
+          width: calc(100% / 3 - 15px);
+        }
+        @include mq($xls) {
+          width: calc(100% / 2 - 10px);
+        }
+        @include mq($xxsh) {
+          width: 100%;
+        }
+      }
+    }
+    .checkout {
+      background-color: $white;
       padding: 0;
-      margin: 0;
-      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      color: $dark;
+      height: 100%;
     }
   }
 }
@@ -269,16 +294,23 @@ code {
   position: fixed;
   right: 0;
   z-index: 1;
+  background-color: transparent;
 
   .button {
     width: 80px;
-    height: 80px;
+    aspect-ratio: 1/1;
     border-radius: 50%;
-    background-color: #455ce9;
+    background-color: $blue;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    @include mq($lg) {
+      width: 60px;
+    }
+    @include mq($lg) {
+      width: 50px;
+    }
   }
 
   .burger {
@@ -322,11 +354,6 @@ code {
   syntax: "<angle>";
   initial-value: 132deg;
   inherits: false;
-}
-
-:root {
-  --card-height: 65vh;
-  --card-width: calc(var(--card-height) / 1.5);
 }
 
 .card {
@@ -377,7 +404,7 @@ code {
 .card::after {
   position: absolute;
   content: "";
-  top: calc(var(--card-height) / 6);
+  top: calc($card-height / 6);
   left: 0;
   right: 0;
   z-index: -1;
@@ -385,7 +412,7 @@ code {
   width: 100%;
   margin: 0 auto;
   transform: scale(0.8);
-  filter: blur(calc(var(--card-height) / 6));
+  filter: blur(calc($card-height / 6));
   background-image: linear-gradient(
     var(--rotate),
     #5ddcff,
@@ -404,12 +431,4 @@ code {
   100% {
     --rotate: 360deg;
   }
-}
-
-a {
-  color: #212534;
-  text-decoration: none;
-  font-family: sans-serif;
-  font-weight: bold;
-  margin-top: 2rem;
 }

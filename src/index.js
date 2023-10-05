@@ -77,14 +77,19 @@ function Cart() {
       exit="exit"
       className="card_product"
     >
-      <div className="products">
-        {navItems.map((data, index) => {
-          return (
-            <div key={index} className="singleProduct">
-              <div className="card"></div>
-            </div>
-          );
-        })}
+      <div className="productsWrapper">
+        <div className="products">
+          {navItems.map((data, index) => {
+            return (
+              <div key={index} className="singleProduct">
+                <div className="card"></div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="checkout">
+          <h1 className="h1">Checkout</h1>
+        </div>
       </div>
       <CurveFN />
     </motion.div>
