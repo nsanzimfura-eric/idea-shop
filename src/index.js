@@ -206,6 +206,19 @@ const CarouselFlow = (props) => {
 
   return (
     <div className="container">
+      <div className="availableonSm">
+        {props.imageData &&
+          props.imageData.map((data, index) => (
+            <div key={index} className="singleProduct">
+              <SingleCard
+                data={data}
+                index={index}
+                setAddedToCart={setAddedToCart}
+                target={() => null}
+              />
+            </div>
+          ))}
+      </div>
       <div className="carouselflow" ref={el}>
         {imagesData.map((data, index) => (
           <div key={index} className="carouselflow-item">
@@ -346,6 +359,7 @@ function App() {
   const vehiclesProducts = productsData.filter(
     (prod) => prod.category === "vehicles"
   );
+  const others = productsData.filter((prod) => prod.category !== "vehicles");
 
   const handleShowCart = () => {
     setIsActive(!isActive);
@@ -354,7 +368,7 @@ function App() {
   //data logic
   return (
     <>
-      <div className="main">
+      <div className={isActive ? "main fixed" : "main"}>
         <div className="header">
           <div onClick={handleShowCart} className="button">
             <div className={`cartBtn ${isActive ? "burgerActive" : ""}`}>
@@ -364,15 +378,71 @@ function App() {
           </div>
         </div>
         <header className="appHeader">
-          <div className="idea">iDeAsHoP</div>
+          <div className="loader">
+            <span>iDeAsHoP</span>
+          </div>
         </header>
         <div className="bodyApp">
-          <h2>Navigate Vehicles market</h2>
-          <CarouselFlow
-            imageData={vehiclesProducts}
-            addedToCart={addedToCart}
-            setAddedToCart={setAddedToCart}
-          />
+          <motion.h4
+            initial={{ y: "-100vw" }}
+            animate={{ y: 0 }}
+            transition={{ duration: 1, type: "spring", stiffness: 10 }}
+            style={{ textAlign: "center" }}
+          >
+            Welcome to Idea shop! Buy your favourite items at the lowest price
+          </motion.h4>
+          <div
+            className="allProducts"
+            style={{ width: "100%", padding: 0, margin: 0 }}
+          >
+            <motion.h2
+              initial={{ y: "-100vw" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.5, delay: 0.5, stiffness: 120 }}
+            >
+              Get you Favourites here
+            </motion.h2>
+            <motion.div
+              initial={{ x: "-100vw" }}
+              animate={{ x: 0 }}
+              transition={{ duration: 1.5, stiffness: 120 }}
+              className="products"
+            >
+              {others &&
+                others.map((data, key) => {
+                  return (
+                    <div key={key} className="singleProduct">
+                      <SingleCard
+                        data={data}
+                        index={key}
+                        setAddedToCart={setAddedToCart}
+                        target={() => null}
+                      />
+                    </div>
+                  );
+                })}
+            </motion.div>
+          </div>
+
+          <motion.h2
+            initial={{ x: "-100vw", y: "-20vh" }}
+            animate={{ x: 0, y: 0 }}
+            transition={{ duration: 1.5, delay: 1, stiffness: 120 }}
+            styles={{ marginTob: 30 }}
+          >
+            Navigate Vehicles market
+          </motion.h2>
+          <motion.div
+            initial={{ x: "-100vw" }}
+            animate={{ x: 0 }}
+            transition={{ duration: 1.5, stiffness: 120 }}
+          >
+            <CarouselFlow
+              imageData={vehiclesProducts}
+              addedToCart={addedToCart}
+              setAddedToCart={setAddedToCart}
+            />
+          </motion.div>
         </div>
       </div>
       <AnimatePresence mode="wait">{isActive && <Cart />}</AnimatePresence>
