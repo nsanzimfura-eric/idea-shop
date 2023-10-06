@@ -255,6 +255,7 @@ function Cart(props) {
       animate="enter"
       exit="exit"
       className="card_product"
+      transition={{ duration: 2 }}
     >
       <div className="productsWrapper">
         <div className="products">
@@ -411,12 +412,18 @@ function App() {
     <>
       <div className={isActive ? "main fixed" : "main"}>
         <div className="header">
-          <div onClick={handleShowCart} className="button">
+          <motion.div
+            initial={{ x: "-200px" }}
+            animate={{ x: 0, y: 0 }}
+            transition={{ duration: 1.5, stiffness: 90 }}
+            onClick={handleShowCart}
+            className="button"
+          >
             <div className={`cartBtn ${isActive ? "burgerActive" : ""}`}>
               <CartIcon />
             </div>
             <span className="items">{totalQuantity}</span>
-          </div>
+          </motion.div>
         </div>
         <header className="appHeader">
           <div className="loader">

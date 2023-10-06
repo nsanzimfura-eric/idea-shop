@@ -266,20 +266,18 @@ $card-width: calc($card-height / 1.5);
       width: calc(100% / 4 - 20px);
       aspect-ratio: 1/1.5;
       height: auto;
-      max-height: calc(100vh / 3 - 20px);
+      max-height: 400px;
       padding: 0;
       margin: 0;
       border-radius: 16px;
       @include mq($xlg) {
         width: calc(100% / 3 - 20px);
-        max-height: calc(100vh / 2 - 20px);
       }
       @include mq($lgb) {
         width: calc(100% / 2 - 20px);
       }
       @include mq($lg) {
         width: calc(100% / 2 - 15px);
-        max-height: calc(100vh / 2);
       }
       @include mq($md) {
         width: calc(100% / 3 - 15px);
@@ -291,7 +289,7 @@ $card-width: calc($card-height / 1.5);
         width: 100%;
       }
       @include mqh($sm) {
-        max-height: unset;
+        max-height: 400px;
       }
     }
   }
@@ -434,6 +432,7 @@ code {
   height: 100%;
   fill: $dark;
   stroke: none;
+  background: $dark;
 }
 
 .card_product {
@@ -485,6 +484,7 @@ code {
       padding-top: 80px;
       padding-bottom: 20px;
       align-items: center;
+      overflow: hidden;
       @include mq($md) {
         padding-top: 10px;
         padding-bottom: 30px;
@@ -496,7 +496,6 @@ code {
       }
       @include animation;
       height: 100vh;
-      overflow-y: auto;
       @include mq($md) {
         height: fit-content;
       }
@@ -732,9 +731,7 @@ code {
   max-height: fit-content;
   margin: 10px auto;
   z-index: 5 !important;
-  @include mqh(800px) {
-    height: 80vh;
-  }
+
   .availableonSm {
     display: none;
     @include mq($xxsh) {
@@ -796,10 +793,10 @@ code {
     width: calc($xlg / 2.5);
   }
   @include mq($sm) {
-    width: calc(200px);
+    width: calc(300px);
   }
-  @include mq($sm) {
-    width: calc(200px);
+  @include mqh($sm) {
+    height: 300px;
   }
 }
 
@@ -826,6 +823,13 @@ code {
     margin-left: 10px;
     top: unset;
     left: unset;
+  }
+  @include mqh(600px) {
+    width: 500px;
+    height: 500px;
+    overflow: hidden;
+    margin-top: -300px;
+    margin-left: -300px;
   }
   @include mq($xxsh) {
     display: none;
