@@ -308,6 +308,12 @@ $card-width: calc($card-height / 1.5);
   .body {
     width: 100%;
     margin: 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 20px;
+
     h3 {
       @include h2;
       color: $white;
@@ -339,8 +345,9 @@ $card-width: calc($card-height / 1.5);
       align-items: center;
       gap: 20px;
       justify-content: space-between;
-      padding: 0 10px;
+      padding: 0 20px;
       color: $green;
+      background-color: transparent;
       margin-top: auto !important;
       span {
         margin-top: 3px;
@@ -884,6 +891,18 @@ code {
         }
         .singleProduct {
           width: calc(100% / 5 - 20px);
+          @include mq($lg) {
+            width: calc(100% / 4 - 20px);
+          }
+          @include mq($md) {
+            width: calc(100% / 3 - 15px);
+          }
+          @include mq($xls) {
+            width: calc(100% / 2 - 15px);
+          }
+          @include mq($xxsh) {
+            width: 100%;
+          }
         }
       }
     }
