@@ -140,6 +140,7 @@ const CarouselFlow = (props) => {
   const img = useRef(null);
   let angleUnit, currentIndex, currentAngle;
   const [card, setCard] = useState(null);
+  const { setAddedToCart, addedToCart } = props;
 
   function setTransform(el, xpos, zpos, angle, flipAngle) {
     el.style.transform = `translateX(${xpos}px) translateZ(${zpos}px) rotateY(${angle}deg) rotateX(${flipAngle}deg)`;
@@ -197,7 +198,6 @@ const CarouselFlow = (props) => {
     setCard(card);
     img.current.style.transform = "scale(1, 1)";
   };
-  const { setAddedToCart } = props;
 
   const handleHideImg = (_) => {
     setCard(null);
@@ -213,6 +213,7 @@ const CarouselFlow = (props) => {
               <SingleCard
                 data={data}
                 index={index}
+                addedToCart={addedToCart}
                 setAddedToCart={setAddedToCart}
                 target={() => null}
               />
@@ -225,6 +226,7 @@ const CarouselFlow = (props) => {
             <SingleCard
               data={data}
               index={index}
+              addedToCart={addedToCart}
               setAddedToCart={setAddedToCart}
               target={target}
             />
@@ -236,6 +238,7 @@ const CarouselFlow = (props) => {
           <SingleCard
             data={card}
             index={card.id}
+            addedToCart={addedToCart}
             setAddedToCart={setAddedToCart}
             target={handleHideImg}
           />
@@ -247,7 +250,25 @@ const CarouselFlow = (props) => {
 
 const SingleCard = (props) => {
   const { data, addedToCart, setAddedToCart, index, target } = props;
-  const handleAddToCart = (id) => {};
+  const handleAddToCart = (id) => {
+    productsData.forEach((product) => {
+      if (product.id === id) {
+        let addedProdu = {
+          ...product,
+          quantity: 1,
+        };
+        if (addedToCart.length === 0) return setAddedToCart(addedProdu);
+        addedToCart.forEach((addedProd) => {
+          if (addedProd.id === product.id) {
+            addedProd.quantity++;
+          }
+        });
+        return setAddedToCart(addedToCart);
+      }
+    });
+    console.log(addedToCart, "added");
+    // const productsAdded =
+  };
 
   return (
     <div className="card single">
@@ -366,6 +387,14 @@ function App() {
   };
 
   //data logic
+  useEffect(() => {
+    localStorage.setItem("productsData", JSON.stringify(productsData));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("addedToCart", JSON.stringify(addedToCart));
+  }, [addedToCart]);
+
   return (
     <>
       <div className={isActive ? "main fixed" : "main"}>
@@ -416,6 +445,7 @@ function App() {
                       <SingleCard
                         data={data}
                         index={key}
+                        addedToCart={addedToCart}
                         setAddedToCart={setAddedToCart}
                         target={() => null}
                       />
