@@ -49,32 +49,6 @@ const menuSlide = {
   },
 };
 
-const navItems = [
-  {
-    title: "Home",
-    href: "/",
-  },
-  {
-    title: "Work",
-    href: "/work",
-  },
-  {
-    title: "About",
-    href: "/about",
-  },
-  {
-    title: "Contact",
-    href: "/contact",
-  },
-];
-
-// cart for user
-const items = [
-  { id: 1, name: "Item 1", quantity: 3, price: 10 },
-  { id: 2, name: "Item 2", quantity: 2, price: 15 },
-  { id: 3, name: "Item 3", quantity: 4, price: 8 },
-];
-
 // svgs------------
 const Done = () => (
   <svg
@@ -140,7 +114,7 @@ const CarouselFlow = (props) => {
   const img = useRef(null);
   let angleUnit, currentIndex, currentAngle;
   const [card, setCard] = useState(null);
-  const { setAddedToCart, addedToCart } = props;
+  const { handleAddToCart } = props;
 
   function setTransform(el, xpos, zpos, angle, flipAngle) {
     el.style.transform = `translateX(${xpos}px) translateZ(${zpos}px) rotateY(${angle}deg) rotateX(${flipAngle}deg)`;
@@ -213,8 +187,7 @@ const CarouselFlow = (props) => {
               <SingleCard
                 data={data}
                 index={index}
-                addedToCart={addedToCart}
-                setAddedToCart={setAddedToCart}
+                handleAddToCart={handleAddToCart}
                 target={() => null}
               />
             </div>
@@ -226,8 +199,7 @@ const CarouselFlow = (props) => {
             <SingleCard
               data={data}
               index={index}
-              addedToCart={addedToCart}
-              setAddedToCart={setAddedToCart}
+              handleAddToCart={handleAddToCart}
               target={target}
             />
           </div>
@@ -238,8 +210,7 @@ const CarouselFlow = (props) => {
           <SingleCard
             data={card}
             index={card.id}
-            addedToCart={addedToCart}
-            setAddedToCart={setAddedToCart}
+            handleAddToCart={handleAddToCart}
             target={handleHideImg}
           />
         )}
@@ -249,26 +220,7 @@ const CarouselFlow = (props) => {
 };
 
 const SingleCard = (props) => {
-  const { data, addedToCart, setAddedToCart, index, target } = props;
-  const handleAddToCart = (id) => {
-    productsData.forEach((product) => {
-      if (product.id === id) {
-        let addedProdu = {
-          ...product,
-          quantity: 1,
-        };
-        if (addedToCart.length === 0) return setAddedToCart(addedProdu);
-        addedToCart.forEach((addedProd) => {
-          if (addedProd.id === product.id) {
-            addedProd.quantity++;
-          }
-        });
-        return setAddedToCart(addedToCart);
-      }
-    });
-    console.log(addedToCart, "added");
-    // const productsAdded =
-  };
+  const { data, handleAddToCart, index, target } = props;
 
   return (
     <div className="card single">
@@ -280,8 +232,8 @@ const SingleCard = (props) => {
           <small>Gategory: {data.category}</small> <span>{data.price}$</span>
         </div>
       </div>
-      <div className="btnAdd">
-        <span className="btnClick" onClick={() => handleAddToCart(data.id)}>
+      <div className="btnAdd" onClick={() => handleAddToCart(data.id)}>
+        <span className="btnClick">
           Add to <CartIcon />
         </span>
       </div>
@@ -289,7 +241,13 @@ const SingleCard = (props) => {
   );
 };
 
-function Cart() {
+function Cart(props) {
+  const { addedToCart, handleRemoveFromCart, totalQuantity } = props;
+  const totalPrice = addedToCart.reduce(
+    (total, product) => total + product.quantity * product.price,
+    0
+  );
+
   return (
     <motion.path
       variants={menuSlide}
@@ -300,36 +258,53 @@ function Cart() {
     >
       <div className="productsWrapper">
         <div className="products">
-          {navItems.map((data, index) => {
-            return (
-              <div key={index} className="singleProduct">
-                <div className="card single">
-                  <img src="./images/cheers.jpg" alt="Card_img" />
-                  <div className="body">
-                    <h3>title</h3>
-                    <p>detailes</p>
-                    <div className="pricing">
-                      <small>Gategory: veicles</small> <span>12$</span>
+          {addedToCart &&
+            addedToCart.map((data, index) => {
+              return (
+                <div key={index} className="singleProduct">
+                  <div className="card single">
+                    <img src={data.img} alt="Card_img" />
+                    <div className="body">
+                      <h3>{data.name}</h3>
+                      <p>{data.details}</p>
+                      <div className="pricing">
+                        <small>Gategory: {data.category}</small>{" "}
+                        <span>{data.price}$</span>
+                      </div>
+                      <div className="btn btnAdd">
+                        <span>Added to cart</span>
+                        <Done />
+                      </div>
                     </div>
-                    <div className="btn btnAdd">
-                      <span>Added to cart</span>
-                      <Done />
+                    <div className="remove">
+                      <motion.div
+                        initial={{ x: "-100%" }}
+                        animate={{ x: 0 }}
+                        transition={{ delay: 0.5, duration: 1 }}
+                        className="circle"
+                        onClick={() => handleRemoveFromCart(data.id)}
+                      >
+                        <DeleteIcon />
+                      </motion.div>
                     </div>
-                  </div>
-                  <div className="remove">
-                    <motion.div
-                      initial={{ x: "-100%" }}
-                      animate={{ x: 0 }}
-                      transition={{ delay: 0.5, duration: 1 }}
-                      className="circle"
-                    >
-                      <DeleteIcon />
-                    </motion.div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          {addedToCart.length === 0 && (
+            <div
+              style={{
+                color: "white",
+                display: "flex",
+                height: "100%",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
+              Empty Cart
+            </div>
+          )}
         </div>
         <div className="checkout">
           <div className="h1 loader">
@@ -344,21 +319,21 @@ function Cart() {
               </tr>
             </thead>
             <tbody>
-              {items.map((item) => (
+              {addedToCart.map((item) => (
                 <tr key={item.id}>
                   <td>{item.name}</td>
                   <td>{item.quantity}</td>
-                  <td className="price">${item.price}</td>
+                  <td className="price">${item.price * item.quantity}</td>
                 </tr>
               ))}
             </tbody>
           </table>
           <div className="payment">
             <div className="amount">
-              Total Quantities: <span>{7}</span>
+              Total Quantities: <span>{totalQuantity}</span>
             </div>
             <div className="amount">
-              Overall Total: <span>{1000}$</span>
+              Overall Total: <span>{totalPrice}$</span>
             </div>
           </div>
           <div className="actions">
@@ -386,6 +361,32 @@ function App() {
     setIsActive(!isActive);
   };
 
+  const handleAddToCart = (id) => {
+    const productToAdd = productsData.find((product) => product.id === id);
+
+    if (!productToAdd) {
+      return;
+    }
+
+    const existingProduct = addedToCart.find(
+      (addedProd) => addedProd.id === productToAdd.id
+    );
+
+    if (existingProduct) {
+      setAddedToCart((prevCart) =>
+        prevCart.map((item) =>
+          item.id === existingProduct.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      );
+    } else {
+      setAddedToCart((prevCart) => [
+        ...prevCart,
+        { ...productToAdd, quantity: 1 },
+      ]);
+    }
+  };
   //data logic
   useEffect(() => {
     localStorage.setItem("productsData", JSON.stringify(productsData));
@@ -395,6 +396,17 @@ function App() {
     localStorage.setItem("addedToCart", JSON.stringify(addedToCart));
   }, [addedToCart]);
 
+  const totalQuantity = addedToCart.reduce(
+    (total, product) => total + product.quantity,
+    0
+  );
+
+  const handleRemoveFromCart = (id) => {
+    const updatedCart = addedToCart.filter((item) => item.id !== id);
+
+    setAddedToCart(updatedCart);
+  };
+
   return (
     <>
       <div className={isActive ? "main fixed" : "main"}>
@@ -403,7 +415,7 @@ function App() {
             <div className={`cartBtn ${isActive ? "burgerActive" : ""}`}>
               <CartIcon />
             </div>
-            <span className="items">{addedToCart.length}</span>
+            <span className="items">{totalQuantity}</span>
           </div>
         </div>
         <header className="appHeader">
@@ -445,8 +457,7 @@ function App() {
                       <SingleCard
                         data={data}
                         index={key}
-                        addedToCart={addedToCart}
-                        setAddedToCart={setAddedToCart}
+                        handleAddToCart={handleAddToCart}
                         target={() => null}
                       />
                     </div>
@@ -470,13 +481,20 @@ function App() {
           >
             <CarouselFlow
               imageData={vehiclesProducts}
-              addedToCart={addedToCart}
-              setAddedToCart={setAddedToCart}
+              handleAddToCart={handleAddToCart}
             />
           </motion.div>
         </div>
       </div>
-      <AnimatePresence mode="wait">{isActive && <Cart />}</AnimatePresence>
+      <AnimatePresence mode="wait">
+        {isActive && (
+          <Cart
+            addedToCart={addedToCart}
+            handleRemoveFromCart={handleRemoveFromCart}
+            totalQuantity={totalQuantity}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }
