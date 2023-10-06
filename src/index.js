@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.scss";
 import { motion, AnimatePresence } from "framer-motion";
@@ -131,6 +131,122 @@ const DeleteIcon = () => (
   </svg>
 );
 
+//carousel container
+
+const RADIUS = 1200;
+const FLIP_RANGE = 3;
+
+const CarouselFlow = (props) => {
+  const el = useRef(null);
+  const img = useRef(null);
+  let angleUnit, currentIndex, currentAngle;
+
+  function setTransform(el, xpos, zpos, angle, flipAngle) {
+    el.style.transform = `translateX(${xpos}px) translateZ(${zpos}px) rotateY(${angle}deg) rotateX(${flipAngle}deg)`;
+  }
+
+  useEffect(() => {
+    angleUnit = 360 / props.imageData.length;
+    currentIndex = currentAngle = 0;
+    target(0, true);
+  }, [props.imageData]);
+
+  // Target an item and make it center
+  function target(index, initial = false) {
+    // Display full size image if matched index
+    if (!initial && index == currentIndex) pickImage(props.imageData[index]);
+
+    // Calculate amount of angle to shift
+    let deltaAngle = -(index - currentIndex) * angleUnit;
+    if (deltaAngle < -180) deltaAngle += 360;
+    else if (deltaAngle > 180) deltaAngle -= 360;
+
+    currentAngle += deltaAngle;
+    currentIndex = index;
+
+    // Rotate the container and flip item angle
+    const cf = el.current;
+    cf.style.transform = `translateZ(-1250px) rotateY(${currentAngle}deg)`;
+
+    // Flip items angle
+    let fliptAngle = 90;
+    const items = cf.children;
+
+    // Iterate the items and apply transformation
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      const itemAngle = angleUnit * i;
+      const itemAngleRad = (itemAngle * Math.PI) / 180;
+      const xpos = Math.sin(itemAngleRad) * RADIUS;
+      const zpos = Math.cos(itemAngleRad) * RADIUS;
+
+      let deltaIndex = Math.abs(i - index);
+      if (deltaIndex > cf.children.length / 2) {
+        deltaIndex = cf.children.length - deltaIndex;
+      }
+      if (deltaIndex <= FLIP_RANGE) {
+        fliptAngle = deltaIndex * (90 / FLIP_RANGE);
+      } else fliptAngle = 90;
+      setTransform(item, xpos, zpos, itemAngle, fliptAngle);
+    }
+  }
+
+  // Display full size image
+  const pickImage = (imgUrl) => {
+    img.current.style.backgroundImage = `url(${imgUrl})`;
+    img.current.style.transform = "scale(1, 1)";
+  };
+  const { addedToCart, setAddedToCart } = props;
+  return (
+    <div className="container">
+      <div className="carouselflow" ref={el}>
+        {props.imageData.map((data, index) => (
+          <div
+            onClick={() => target(index)}
+            key={index}
+            className="carouselflow-item"
+          >
+            <SingleCard
+              data={data}
+              addedToCart={addedToCart}
+              setAddedToCart={setAddedToCart}
+            />
+          </div>
+        ))}
+      </div>
+      <div
+        onClick={() => {
+          img.current.style.transform = "scale(0, 0)";
+        }}
+        className="image-display"
+        ref={img}
+      ></div>
+    </div>
+  );
+};
+
+const SingleCard = (props) => {
+  const { data, addedToCart, setAddedToCart } = props;
+  const handleAddToCart = (id) => {};
+  return (
+    <div className="card single">
+      <img src={data.img} alt="Card_img" />
+      <div className="body">
+        <h3>{data.name}</h3>
+        <p>{data.details}</p>
+        <div className="pricing">
+          <small>Gategory: {data.category}</small> <span>{data.price}$</span>
+        </div>
+        <div className="btnAdd">
+          <span className="btnClick" onClick={() => handleAddToCart(data.id)}>
+            Add to <CartIcon />
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 function Cart() {
   return (
     <motion.path
@@ -153,7 +269,7 @@ function Cart() {
                     <div className="pricing">
                       <small>Gategory: veicles</small> <span>12$</span>
                     </div>
-                    <div className="btn">
+                    <div className="btn btnAdd">
                       <span>Added to cart</span>
                       <Done />
                     </div>
@@ -217,11 +333,17 @@ function Cart() {
 
 function App() {
   const [isActive, setIsActive] = useState(false);
+  const [addedToCart, setAddedToCart] = useState([]);
+
+  const vehiclesProducts = productsData.filter(
+    (prod) => prod.category === "vehicles"
+  );
 
   const handleShowCart = () => {
     setIsActive(!isActive);
   };
 
+  //data logic
   return (
     <>
       <div className="main">
@@ -230,8 +352,19 @@ function App() {
             <div className={`cartBtn ${isActive ? "burgerActive" : ""}`}>
               <CartIcon />
             </div>
-            <span className="items">{50}</span>
+            <span className="items">{addedToCart.length}</span>
           </div>
+        </div>
+        <header className="appHeader">
+          <div className="idea">iDeAsHoP</div>
+        </header>
+        <div className="bodyApp">
+          <h2>Navigate Vehicles market</h2>
+          <CarouselFlow
+            imageData={vehiclesProducts}
+            addedToCart={addedToCart}
+            setAddedToCart={setAddedToCart}
+          />
         </div>
       </div>
       <AnimatePresence mode="wait">{isActive && <Cart />}</AnimatePresence>

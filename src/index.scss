@@ -358,6 +358,18 @@ $card-width: calc($card-height / 1.5);
       visibility: visible;
     }
   }
+  .btnAdd {
+    margin-top: auto;
+    padding: 10px 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $green;
+    color: white;
+    @include h4;
+    font-family: $poppins;
+    font-weight: 700;
+  }
 }
 
 body {
@@ -711,4 +723,86 @@ code {
   100% {
     --rotate: 360deg;
   }
+}
+
+//  carousel
+
+.container {
+  max-width: 100% !important;
+  width: 100%;
+  height: 800px;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
+  position: relative;
+  overflow: hidden;
+  margin: 10px auto;
+  z-index: 5 !important;
+  @include mqh(800px) {
+    height: 100vh;
+  }
+}
+
+.carouselflow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  backface-visibility: visible;
+  transform-style: preserve-3d;
+  transform-origin: 50% 50%;
+  cursor: pointer;
+  transition: 1s all ease-out;
+  @include mq($xxsh) {
+    display: none;
+  }
+}
+
+.carouselflow-item {
+  width: 320px;
+  aspect-ratio: 1/1;
+  height: auto;
+  transform-origin: 50% 100%;
+  position: absolute;
+  backface-visibility: visible;
+  top: -160px;
+  left: -160px;
+  border: 6px solid #eee;
+  border-radius: 8px;
+  background-color: #111;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  transition: 1.25s all cubic-bezier(0.17, 0.75, 0.58, 0.95);
+  box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.7);
+  @include mq($md) {
+    width: 300px;
+  }
+  @include mq($xls) {
+    width: calc($xlg / 2.5);
+  }
+  @include mq($sm) {
+    width: calc(200px);
+  }
+  @include mq($sm) {
+    width: calc(200px);
+  }
+}
+
+.image-display {
+  position: fixed;
+  cursor: pointer;
+  width: 1000px;
+  height: 600px;
+  top: 50%;
+  left: 50%;
+  margin-top: -300px;
+  margin-left: -500px;
+  border: 2px solid white;
+  border-radius: 4px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  transition: 0.5s all ease-out;
+  transform: scale(0, 0);
 }
