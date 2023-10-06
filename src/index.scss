@@ -8,7 +8,7 @@ $young: "Young Serif", serif;
 
 $blue: #04259f;
 $dark: #212534;
-$white: #f2f5ff;
+$white: #c1cbee;
 $red: #ab4e68;
 $warning: #c5bc05;
 $gray: #999999;
@@ -282,6 +282,7 @@ $card-width: calc($card-height / 1.5);
   padding: 0;
   justify-content: flex-start;
   gap: 5px;
+  position: relative;
   @include transition;
   img {
     @include transition;
@@ -308,7 +309,53 @@ $card-width: calc($card-height / 1.5);
       font-family: $poppins;
       color: $white;
       text-align: left;
-      padding: 0 5px;
+      padding: 0 10px;
+    }
+    .pricing {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: $white;
+      font-family: $poppins;
+      padding: 0 10px;
+    }
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      justify-content: space-between;
+      padding: 0 10px;
+      color: $green;
+      margin-top: auto !important;
+      span {
+        margin-top: 3px;
+      }
+    }
+  }
+  .remove {
+    position: absolute;
+    width: 10%;
+    top: -5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+    .circle {
+      cursor: pointer;
+      @include transition;
+      background-blend-mode: color-dodge;
+      background-color: $white;
+      border-radius: 50%;
+      padding: 10px;
+      justify-content: center;
+      align-items: center;
+      visibility: hidden;
+    }
+  }
+  &:hover {
+    .circle {
+      visibility: visible;
     }
   }
 }
@@ -321,6 +368,7 @@ body {
   @include scroll-bar;
   margin: 0;
   padding: 0;
+  background-color: $white;
   * {
     box-sizing: border-box;
     font-family: $poppins;

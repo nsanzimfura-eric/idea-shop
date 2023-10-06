@@ -151,16 +151,23 @@ function Cart() {
                     <h3>title</h3>
                     <p>detailes</p>
                     <div className="pricing">
-                      <small>veicles</small> <span>12$</span>
+                      <small>Gategory: veicles</small> <span>12$</span>
                     </div>
                     <div className="btn">
+                      <span>Added to cart</span>
                       <Done />
                     </div>
                   </div>
-                </div>
-                <div className="remove">
-                  {" "}
-                  <DeleteIcon />
+                  <div className="remove">
+                    <motion.div
+                      initial={{ x: "-100%" }}
+                      animate={{ x: 0 }}
+                      transition={{ delay: 0.5, duration: 1 }}
+                      className="circle"
+                    >
+                      <DeleteIcon />
+                    </motion.div>
+                  </div>
                 </div>
               </div>
             );
