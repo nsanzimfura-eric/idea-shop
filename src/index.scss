@@ -264,20 +264,22 @@ $card-width: calc($card-height / 1.5);
     }
     .singleProduct {
       width: calc(100% / 4 - 20px);
-      aspect-ratio: 1/1.2;
+      aspect-ratio: 1/1.5;
       height: auto;
-      max-height: calc(100vh / 2);
+      max-height: calc(100vh / 3 - 20px);
       padding: 0;
       margin: 0;
       border-radius: 16px;
       @include mq($xlg) {
         width: calc(100% / 3 - 20px);
+        max-height: calc(100vh / 2 - 20px);
       }
       @include mq($lgb) {
         width: calc(100% / 2 - 20px);
       }
       @include mq($lg) {
         width: calc(100% / 2 - 15px);
+        max-height: calc(100vh / 2);
       }
       @include mq($md) {
         width: calc(100% / 3 - 15px);
@@ -287,6 +289,9 @@ $card-width: calc($card-height / 1.5);
       }
       @include mq($xxsh) {
         width: 100%;
+      }
+      @include mqh($sm) {
+        max-height: unset;
       }
     }
   }
