@@ -202,39 +202,6 @@ $card-width: calc($card-height / 1.5);
   @return #{$element * 100%};
 }
 
-@mixin iconBtn {
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: auto;
-  aspect-ratio: 1/1;
-  border-radius: 50%;
-  padding: 7px;
-  cursor: pointer;
-  background-color: $white;
-  @include mq($lg) {
-    height: 35px;
-  }
-  @include mq($mdb) {
-    height: 40px;
-  }
-  @include mq($small-device) {
-    height: 30px;
-  }
-  .icon {
-    @include mq($lg) {
-      font-size: 20px;
-    }
-    @include mq($mdb) {
-      font-size: 30px;
-    }
-    @include mq($small-device) {
-      font-size: 20px;
-    }
-  }
-}
-
 @mixin h1 {
   font-size: pxToEm(30);
   font-family: $young;
@@ -310,6 +277,7 @@ $card-width: calc($card-height / 1.5);
       color: $white;
       text-align: left;
       padding: 0 10px;
+      text-align: center;
     }
     .pricing {
       width: 100%;
@@ -798,11 +766,19 @@ code {
   left: 50%;
   margin-top: -300px;
   margin-left: -500px;
-  border: 2px solid white;
+  border: 2px solid $green;
   border-radius: 4px;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   transition: 0.5s all ease-out;
   transform: scale(0, 0);
+  @include mq(1000px) {
+    width: 90vw;
+    height: 80vh;
+    margin-top: 10px;
+    margin-left: 10px;
+    top: unset;
+    left: unset;
+  }
 }

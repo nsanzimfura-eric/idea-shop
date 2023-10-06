@@ -133,28 +133,29 @@ const DeleteIcon = () => (
 
 //carousel container
 
-const RADIUS = 1200;
-const FLIP_RANGE = 3;
-
 const CarouselFlow = (props) => {
+  const RADIUS = 1200;
+  const FLIP_RANGE = 3;
   const el = useRef(null);
   const img = useRef(null);
   let angleUnit, currentIndex, currentAngle;
+  const [card, setCard] = useState(null);
 
   function setTransform(el, xpos, zpos, angle, flipAngle) {
     el.style.transform = `translateX(${xpos}px) translateZ(${zpos}px) rotateY(${angle}deg) rotateX(${flipAngle}deg)`;
   }
+  const imagesData = [...props.imageData, ...props.imageData];
 
   useEffect(() => {
-    angleUnit = 360 / props.imageData.length;
+    angleUnit = 360 / imagesData.length;
     currentIndex = currentAngle = 0;
     target(0, true);
-  }, [props.imageData]);
+  }, [imagesData]);
 
   // Target an item and make it center
   function target(index, initial = false) {
     // Display full size image if matched index
-    if (!initial && index == currentIndex) pickImage(props.imageData[index]);
+    if (!initial && index == currentIndex) pickImage(imagesData[index]);
 
     // Calculate amount of angle to shift
     let deltaAngle = -(index - currentIndex) * angleUnit;
@@ -192,56 +193,63 @@ const CarouselFlow = (props) => {
   }
 
   // Display full size image
-  const pickImage = (imgUrl) => {
-    img.current.style.backgroundImage = `url(${imgUrl})`;
+  const pickImage = (card) => {
+    setCard(card);
     img.current.style.transform = "scale(1, 1)";
   };
-  const { addedToCart, setAddedToCart } = props;
+  const { setAddedToCart } = props;
+
+  const handleHideImg = (_) => {
+    setCard(null);
+    img.current.style.transform = "scale(0, 0)";
+  };
+
   return (
     <div className="container">
       <div className="carouselflow" ref={el}>
-        {props.imageData.map((data, index) => (
-          <div
-            onClick={() => target(index)}
-            key={index}
-            className="carouselflow-item"
-          >
+        {imagesData.map((data, index) => (
+          <div key={index} className="carouselflow-item">
             <SingleCard
               data={data}
-              addedToCart={addedToCart}
+              index={index}
               setAddedToCart={setAddedToCart}
+              target={target}
             />
           </div>
         ))}
       </div>
-      <div
-        onClick={() => {
-          img.current.style.transform = "scale(0, 0)";
-        }}
-        className="image-display"
-        ref={img}
-      ></div>
+      <div className="image-display" ref={img}>
+        {card && (
+          <SingleCard
+            data={card}
+            index={card.id}
+            setAddedToCart={setAddedToCart}
+            target={handleHideImg}
+          />
+        )}
+      </div>
     </div>
   );
 };
 
 const SingleCard = (props) => {
-  const { data, addedToCart, setAddedToCart } = props;
+  const { data, addedToCart, setAddedToCart, index, target } = props;
   const handleAddToCart = (id) => {};
+
   return (
     <div className="card single">
-      <img src={data.img} alt="Card_img" />
-      <div className="body">
+      <img src={data.img} alt="Card_img" onClick={() => target(index)} />
+      <div className="body" onClick={() => target(index)}>
         <h3>{data.name}</h3>
         <p>{data.details}</p>
         <div className="pricing">
           <small>Gategory: {data.category}</small> <span>{data.price}$</span>
         </div>
-        <div className="btnAdd">
-          <span className="btnClick" onClick={() => handleAddToCart(data.id)}>
-            Add to <CartIcon />
-          </span>
-        </div>
+      </div>
+      <div className="btnAdd">
+        <span className="btnClick" onClick={() => handleAddToCart(data.id)}>
+          Add to <CartIcon />
+        </span>
       </div>
     </div>
   );
