@@ -423,18 +423,6 @@ code {
   font-family: $poppins;
 }
 
-//curve
-.svgCurve {
-  position: absolute;
-  top: 0;
-  left: -99px;
-  width: 100px;
-  height: 100%;
-  fill: $dark;
-  stroke: none;
-  background: $dark;
-}
-
 .card_product {
   height: 100vh;
   background-color: $dark;
@@ -931,4 +919,15 @@ code {
   ::-webkit-scrollbar {
     display: none;
   }
+}
+
+//curve
+.svgCurve {
+  position: absolute;
+  top: 0;
+  width: 100px;
+  height: 100%;
+  left: -100px;
+  fill: $dark;
+  stroke: none;
 }

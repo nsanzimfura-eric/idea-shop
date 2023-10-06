@@ -5,10 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { productsData } from "./productsData";
 
 function CurveFN() {
-  const initialPath = `M100 0 L200 0 L200 ${window.innerHeight} L100 ${
+  const initialPath = `M150 0 L300 0 L300 ${window.innerHeight} L150 ${
     window.innerHeight
   } Q-100 ${window.innerHeight / 2} 100 0`;
-  const targetPath = `M100 0 L200 0 L200 ${window.innerHeight} L100 ${
+  const targetPath = `M150 0 L200 0 L200 ${window.innerHeight} L150 ${
     window.innerHeight
   } Q100 ${window.innerHeight / 2} 100 0`;
 
@@ -37,7 +37,6 @@ function CurveFN() {
     </svg>
   );
 }
-
 //animation variables
 
 const menuSlide = {
@@ -251,10 +250,10 @@ function Cart(props) {
   return (
     <motion.path
       variants={menuSlide}
-      initial="initial"
-      animate="enter"
       exit="exit"
       className="card_product"
+      initial={{ x: "-100vw" }}
+      animate={{ x: 0 }}
       transition={{ duration: 2 }}
     >
       <div className="productsWrapper">
